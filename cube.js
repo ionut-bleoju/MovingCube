@@ -1,43 +1,43 @@
-var range = document.getElementById("range");
-var canvas = document.getElementById('canvas');
-var ctx = canvas.getContext('2d');
+const range = document.getElementById("range"),
+    canvas = document.getElementById('canvas'),
+    ctx = canvas.getContext('2d'),
+    KEY = {
+        RIGHT: 39,
+        UP: 38,
+        LEFT: 37,
+        DOWN: 40,
+    };
+
+
+let speed = 2,
+    interval = null,
+    input = {
+        right: false,
+        up: false,
+        left: false,
+        down: false,
+        quit: false
+    },
+    square = {
+        x: 0,
+        y: 10,
+        w: 20,
+        h: 20
+    };
+
 document.addEventListener('keydown', press);
 document.addEventListener('keyup', release)
-speed = 2;
-var interval = null;
-
-var KEY = {
-    RIGHT: 39,
-    UP: 38,
-    LEFT: 37,
-    DOWN: 40,
-};
-
-var input = {
-    right: false,
-    up: false,
-    left: false,
-    down: false,
-    quit: false
-};
-
-var square = {
-    x: 0,
-    y: 10,
-    w: 20,
-    h: 20
-};
 
 
-function press(evt) {
-    var code = evt.keyCode;
-    switch (code) {
+function press({ keyCode }) {
+
+    switch (keyCode) {
         case KEY.RIGHT:
             {
                 input.right = true
                 if (interval == null) {
                     interval = setInterval(function () {
-                        speed++;
+                        speed += 1 / speed;
                         called = true;
                     }, 150);
                 }
@@ -49,7 +49,8 @@ function press(evt) {
                 input.up = true;
                 if (interval == null) {
                     interval = setInterval(function () {
-                        speed++;
+                        speed += 1 / speed;
+
                         called = true;
                     }, 150);
                 }
@@ -61,7 +62,8 @@ function press(evt) {
                 input.left = true;
                 if (interval == null) {
                     interval = setInterval(function () {
-                        speed++;
+                        speed += 1 / speed;
+
                         called = true;
                     }, 150);
                 }
@@ -73,7 +75,8 @@ function press(evt) {
                 input.down = true;
                 if (interval == null) {
                     interval = setInterval(function () {
-                        speed++;
+                        speed += 1 / speed;
+
                         called = true;
                     }, 150);
                 }
@@ -122,11 +125,14 @@ function release(evt) {
     }
 }
 
-ctx.fillStyle = "green";
 
 function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.clearRect(square.x, square.y, canvas.width, canvas.height);
+    ctx.fillStyle = 'green';
+    ctx.strokeStyle = 'rgba(0, 0, 0, 1)';
+
+
     if (input.right) {
         if (square.x < (canvas.width - square.w)) {
             square.x = square.x + speed;
@@ -147,8 +153,8 @@ function animate() {
             square.y = square.y + speed;
         }
     }
-    ctx.strokeRect(square.x, square.y, square.w, square.h);
-    window.requestAnimationFrame(animate)
-}
+    ctx.fillRect(square.x, square.y, square.w, square.h);
+    window.requestAnimationFrame(animate);
+};
 
-animate();
+window.requestAnimationFrame(animate)
